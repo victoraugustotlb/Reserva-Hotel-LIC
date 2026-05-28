@@ -4,53 +4,67 @@
 #define LINHA 20
 #define COLUNA 14
 
-int i=0,j=0;
-char hotel[20][14];
-
 //Declaração das funções
 int MenuHotel();
-char RealizarCheckIN(char m[LINHA][COLUNA]);
-int gerarhotel(int i,int j);
-void verhotel(int i,int j);
-void reservarapto(int i,int j);
+void RealizarCheckIN(char m[LINHA][COLUNA]);
+void gerarhotel(char m[LINHA][COLUNA]);
+void verhotel(char m[LINHA][COLUNA]);
 
 int main(){
-    MenuHotel();
-    if(MenuHotel() == 1){
-        RealizarCheckIN(hotel);
-    }else if(MenuHotel() == 2){
-        //Função RealizarCheckOUT
-    }else if(MenuHotel() == 3){
-        reservarapto(i,j);
-    }else if(MenuHotel() == 4){ 
-        //Função CancelarReserva
-    }else if(MenuHotel() == 5){
-        verhotel(i,j);
-    }else if(MenuHotel() == 6){
-        //Função Informações do hospede
-    }else if(MenuHotel() == 7){
-        //Função Taxa de ocupação e reservas do hotel
-    }else if(MenuHotel() == 8){
-        printf("Obrigado por usar o Hotel LIC! Volte sempre!\n");
-    }else{
-        printf("Opção inválida! Por favor, escolha uma opção válida.\n");
-    }
+	char hotel[LINHA][COLUNA];
 
+	gerarhotel(hotel);
+	do{
+
+	
+    switch (MenuHotel()){
+        case 1:
+            RealizarCheckIN(hotel);
+            break;
+        case 2:
+            //Função Check-out
+            break;
+        case 3:
+            break;
+        case 4:
+            //Função Cancelar Reserva
+            break;
+        case 5:
+            verhotel(hotel);
+            break;
+        case 6:
+            //Função Informações do hospede
+            break;
+        case 7:
+            //Função Taxa de ocupação e reservas do hotel
+            break;
+        case 8:
+            printf("Saindo do programa...\n");
+            break;
+        default:
+            printf("Opção inválida! Por favor, escolha uma opção válida.\n");
+    }
+}while(MenuHotel() != 8);
 
     return 0;
 }
 
 //REQ03
-char RealizarCheckIN(char m[LINHA][COLUNA]){
+void RealizarCheckIN(char m[LINHA][COLUNA]){
+	int Apto, Andar;
     int checkIN;
     printf("Digite o apartamento e o andar da reserva para realizar o check-in: \n");
-    scanf("%d %d", &checkIN, &checkIN);
-    if (checkIN == 'O'){
+    scanf("%d %d", &Apto, &Andar);
+	if (Andar < 1 || Andar > LINHA || Apto < 1 || Apto > COLUNA) {
+        printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
+        return; // Sai da função imediatamente, voltando para o menu
+    }
+    if (m[Andar-1][Apto-1] == 'O'){
         printf("Erro! Apartamento Ocupado!\n");
 
     }else{
         printf("Check-in realizado com sucesso!\n");
-        return 'O'; // 'O' para Ocupado
+        m[Andar-1][Apto-1] = 'O'; // 'O' para Ocupado
     }
     
 }
@@ -76,79 +90,32 @@ int MenuHotel(){
 
 
 //REQ01 - Gera o mapa do hotel
-int gerarhotel(int i,int j)
-{
-	int countap=0;
-	printf("aptos:  \t");
-	for(j=1;j<=COLUNA;j++){
-		printf("%2d ",j);
-		if(j%COLUNA==0){
-			printf("\n");
+void gerarhotel(char m[LINHA][COLUNA]){
+	for(int i = 0;i < LINHA;i++){
+		for(int j =0 ;j < COLUNA;j++){
+			m[i][j]='.';
 		}
 	}
-	printf("\n");
-	for(i=20;i>=LINHA;i--){
-		printf("andar: %2d\t",i);
-		for(j=1;j<=COLUNA;j++){
-			hotel[i][j]='.';
-			printf(" %c ",hotel[i][j]);
-			if(j%COLUNA==0){
-				printf("\n");
-			}
-			countap++;
-		}
-	}
-	printf("\n\n\n");
-	return countap,hotel[20][14];
 }
 
 //REQ01 - Exibe o mapa do hotel
-void verhotel(int i,int j)
-{
-	printf("aptos:  \t");
-	for(j=1;j<=COLUNA;j++){
-		printf("%2d ",j);
-		if(j%COLUNA==0){
-			printf("\n");
-		}
-	}
-	printf("\n");
-	for(i=20;i>=LINHA;i--){
-		printf("andar: %2d\t",i);
-		for(j=1;j<=COLUNA;j++){
-			printf(" %c ",hotel[i][j]);
-			if(j%COLUNA==0){
-				printf("\n");
-			}
-		}
-	}
-}
+void verhotel(char m[LINHA][COLUNA]){
+    printf("\n=== MAPA DO HOTEL ===\n\n");
+    // Mostra o cabeçalho dos apartamentos (1 a 20)
+    printf("Apartamento:   ");
+    for(int j = 1; j <= COLUNA; j++){
+        printf("%2d ", j);
+    }
+    printf("\n-------------------------------------------------------------\n");
 
-//REQ02 - Realiza a reserva do apartamento
-void reservarapto(int i,int j)
-{
-	int escolhendo=1;
-	while(escolhendo!=0){
-	printf("\n\nescolher andar: ");
-	scanf("%d",&i);
-	printf("\n\n");
-	while(i>20||i<0){
-		printf("\n\nescolher andar: ");
-		scanf("%d",&i);
-	}
-	printf("\n\n");
-	printf("escolher apartamento: ");
-	scanf("%d",&j);
-	printf("\n\n");
-	while(j>14||j<0){
-		printf("\n\nescolher apartamento: ");
-		scanf("%d",&j);
-	}
-	printf("\n\n");
-	hotel[i][j]='R';
-	system("cls");
-	printf("continuar?\n\n0-nao\noutro-sim\n\n");
-	scanf("%d",&escolhendo);
-	printf("\n\n");
-	}
+    // (Linha-1) pois queriamos imprimir o hotel de baixo para cima!
+    for(int i = LINHA - 1; i >= 0; i--){
+        // i + 1 serve para arrumar a numeração dos andares, já que o índice começa em 0 e não em 1.
+        printf("Andar %2d |     ", i + 1); 
+        for(int j = 0; j < COLUNA; j++){
+            printf(" %c ", m[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
 }
