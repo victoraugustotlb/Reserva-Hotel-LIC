@@ -15,10 +15,12 @@ struct hospede{
 
 //Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código.
 int MenuHotel();
-void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd);
+void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd); //NAO FUNCIONA QUANDO APT JA ESTA RESERVADO!
+void fazerCheckout(char m[LINHA][COLUNA]);
 void gerarhotel(char m[LINHA][COLUNA]);
 void verhotel(char m[LINHA][COLUNA]);
 void ReservarApto(char m[LINHA][COLUNA]);
+void porcentagem(char m[LINHA][COLUNA]);
 struct hospede Cadastro(struct hospede h);
 void limparBuffer();
 void cancelarReserva(char m[LINHA][COLUNA]);
@@ -39,7 +41,7 @@ int main(){
             RealizarCheckIN(hotel, lista, &quantidadeHospedes);
             break;
         case 2:
-            //Função Check-out
+            fazerCheckout(hotel);
             break;
         case 3:
             ReservarApto(hotel);
@@ -62,7 +64,7 @@ int main(){
                 break;
             break;
         case 7:
-            //Função Taxa de ocupação e reservas do hotel
+            porcentagem(hotel);
             break;
         case 8:
             printf("Saindo do programa...\n");
@@ -114,7 +116,7 @@ int MenuHotel(){
     printf("[8]. Sair\n");
     printf("==========================\n");
     printf("Escolha um número para acessar a opção : \n");
-    scanf("%d", &escolha);
+    scanf(" %d", &escolha);
     return escolha;
 }
 
@@ -185,6 +187,48 @@ void cancelarReserva(char m[LINHA][COLUNA]){
 		printf("Reserva cancelada com sucesso\n");
 		return;
 	}
+}
+
+void fazerCheckout(char m[LINHA][COLUNA]){
+	int andar, apt;
+	printf("=== Fazer Checkout ===\n");
+	printf("Insira respectivamente o andar e o apartamento(x y):\n");
+	scanf("%d %d", &andar, &apt);
+
+	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){
+		printf("Erro: Apartamento/Andar inexistente\n");
+		return;
+	}
+	else if(m[andar - 1][apt - 1] != 'O'){
+		printf("Erro: Apartamento nao ocupado\n");
+		return;
+	}
+	else{
+		m[andar - 1][apt - 1] = '.';
+		printf("Checkout feito com sucesso\n");
+		return;
+	}
+}
+
+void porcentagem(char m[LINHA][COLUNA]){
+	float taxaO = 0;
+	float taxaR = 0;
+	for(int i = 0; i < LINHA; i++){
+		for(int j = 0; j < COLUNA; j++){
+			if(m[i][j] == 'O'){
+				taxaO++;
+			}
+			else if(m[i][j] == 'R'){
+				taxaR++;
+			}
+		}
+	}
+	taxaO = (taxaO / 280) * 100;
+	taxaR = (taxaR / 280) * 100;
+	printf("=== Taxas ===\n");
+	printf("Taxa de ocupacao: %.2f%%\n",taxaO);
+	printf("Taxa de reservas: %.2f%%\n",taxaR);
+	return;
 }
 
 struct hospede Cadastro(struct hospede h){
