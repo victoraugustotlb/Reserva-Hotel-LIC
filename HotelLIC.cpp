@@ -21,7 +21,7 @@ void verhotel(char m[LINHA][COLUNA]);
 void ReservarApto(char m[LINHA][COLUNA]);
 struct hospede Cadastro(struct hospede h);
 void limparBuffer();
-
+void cancelarReserva(char m[LINHA][COLUNA]);
 struct hospede lista[MAX_HOSPEDES];
 int quantidadeHospedes = 0; // Variável para controlar o número de hóspedes cadastrados
 
@@ -45,7 +45,7 @@ int main(){
             ReservarApto(hotel);
             break;
         case 4:
-            //Função Cancelar Reserva
+            cancelarReserva(hotel);
             break;
         case 5:
             verhotel(hotel);
@@ -164,6 +164,27 @@ void ReservarApto(char m[LINHA][COLUNA]){
         printf("Apartamento reservado com sucesso!\n");
         m[Andar-1][Apto-1] = 'R'; // 'R' para Reservado
     }
+}
+
+void cancelarReserva(char m[LINHA][COLUNA]){
+	int andar, apt;
+	printf("=== Cancelar Reserva ===\n");
+	printf("Insira respectivamente o andar e o apartamento(x y):\n");
+	scanf("%d %d", &andar, &apt);
+
+	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){
+		printf("Erro: Apartamento/Andar inexistente\n");
+		return;
+	}
+	else if(m[andar - 1][apt - 1] != 'R'){
+		printf("Erro: Apartamento nao reservado\n");
+		return;
+	}
+	else{
+		m[andar - 1][apt - 1] = '.';
+		printf("Reserva cancelada com sucesso\n");
+		return;
+	}
 }
 
 struct hospede Cadastro(struct hospede h){
