@@ -15,7 +15,7 @@ struct hospede{
 
 //Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código.
 int MenuHotel();
-void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd); //NAO FUNCIONA QUANDO APT JA ESTA RESERVADO!
+int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 void fazerCheckout(char m[LINHA][COLUNA]);
 void gerarhotel(char m[LINHA][COLUNA]);
 void verhotel(char m[LINHA][COLUNA]);
@@ -38,7 +38,7 @@ int main(){
     
     switch (opcao) {
         case 1:
-            RealizarCheckIN(hotel, lista, &quantidadeHospedes);
+            quantidadeHospedes = RealizarCheckIN(hotel, lista, quantidadeHospedes);
             break;
         case 2:
             fazerCheckout(hotel);
@@ -78,27 +78,32 @@ int main(){
 }
 
 //REQ03
-void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd){
+int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
     int Apto, Andar;
     printf("Digite o apartamento e o andar da reserva para realizar o check-in: \n");
     scanf("%d %d", &Apto, &Andar);
+    
     if (Andar < 1 || Andar > LINHA || Apto < 1 || Apto > COLUNA) {
         printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
-        return; // Sai da função imediatamente, voltando para o menu
-    }
-    if (m[Andar-1][Apto-1] == 'O'){ //Aqui verifica se o apartamento já está ocupado!
-        printf("Erro! Apartamento Ocupado!\n");
-
-    }else if(m[Andar-1][Apto-1] == 'R'){
-        lista[*qtd] = Cadastro(lista[*qtd]); //Aqui o cadastro do hospede é feito quando o apartamento está reservado.
-        (*qtd)++; 
-    }else{
-        lista[*qtd] = Cadastro(lista[*qtd]); //Aqui o cadastro do hospede é feito quando o apartamento está disponível.
-        (*qtd)++; 
-        printf("Check-in realizado com sucesso!\n");
-        m[Andar-1][Apto-1] = 'O'; // 'O' para Ocupado
+        return qtd; // Não mudou nada, retorna a mesma quantidade
     }
     
+    if (m[Andar-1][Apto-1] == 'O') { 
+        printf("Erro! Apartamento Ocupado!\n");
+        return qtd; // Não mudou nada, retorna a mesma quantidade
+        
+    } else if (m[Andar-1][Apto-1] == 'R') {
+        lista[qtd] = Cadastro(lista[qtd]); 
+        m[Andar-1][Apto-1] = 'O'; // Passa de Reservado para Ocupado
+        printf("Check-in de reserva realizado com sucesso!\n");
+        return qtd + 1; // Incrementa e retorna a nova quantidade
+        
+    } else {
+        lista[qtd] = Cadastro(lista[qtd]); 
+        m[Andar-1][Apto-1] = 'O'; // Passa de Livre para Ocupado
+        printf("Check-in realizado com sucesso!\n");
+        return qtd + 1; // Incrementa e retorna a nova quantidade
+    }
 }
 //Menu do Hotel
 int MenuHotel(){
@@ -172,7 +177,7 @@ void cancelarReserva(char m[LINHA][COLUNA]){
 	int andar, apt;
 	printf("=== Cancelar Reserva ===\n");
 	printf("Insira respectivamente o andar e o apartamento(x y):\n");
-	scanf("%d %d", &andar, &apt);
+	scanf("%d %d", &apt, &andar);
 
 	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){
 		printf("Erro: Apartamento/Andar inexistente\n");
@@ -193,7 +198,7 @@ void fazerCheckout(char m[LINHA][COLUNA]){
 	int andar, apt;
 	printf("=== Fazer Checkout ===\n");
 	printf("Insira respectivamente o andar e o apartamento(x y):\n");
-	scanf("%d %d", &andar, &apt);
+	scanf("%d %d", &apt, &andar);
 
 	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){
 		printf("Erro: Apartamento/Andar inexistente\n");
