@@ -11,6 +11,8 @@ struct hospede{
     char nome[50];
     char cpf[15];
     char telefone[20];
+    int Apto;
+    int Andar;
 };
 
 //Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código
@@ -25,6 +27,7 @@ struct hospede Cadastro(struct hospede h);
 void limparBuffer();
 void cancelarReserva(char m[LINHA][COLUNA]);
 struct hospede lista[MAX_HOSPEDES];
+void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 int quantidadeHospedes = 0; // Variável para controlar o número de hóspedes cadastrados
 
 //Aqui se encontra a função principal do programa.
@@ -53,12 +56,14 @@ int main(){
             verhotel(hotel);
             break;
         case 6:
-            printf("\n=== HÓSPEDES NO HOTEL ===\n");
+            printf("\n=== HÓSPEDES NO HOTEL ===\n"); //REQ12 - Extra
                 if (quantidadeHospedes == 0) {
                     printf("Nenhum hóspede cadastrado no momento.\n");
                 } else {
                     for (int i = 0; i < quantidadeHospedes; i++) {
                         printf("%d. %s - CPF: %s - Telefone: %s\n", i + 1, lista[i].nome, lista[i].cpf, lista[i].telefone);
+                        printf("   Andar: %d, Apartamento: %d\n", lista[i].Andar, lista[i].Apto);
+                        printf("\n");
                     }
                 }
                 break;
@@ -67,12 +72,15 @@ int main(){
             porcentagem(hotel);
             break;
         case 8:
+            visualizarApartamento(hotel, lista, quantidadeHospedes);
+            break;
+        case 9:
             printf("Saindo do programa...\n");
             break;
         default:
             printf("Opção inválida! Por favor, escolha uma opção válida.\n");
     }
-}while(opcao != 8);
+}while(opcao != 9);
 
     return 0;
 }
@@ -94,12 +102,16 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
         
     } else if (m[Andar-1][Apto-1] == 'R') {
         lista[qtd] = Cadastro(lista[qtd]); 
+        lista[qtd].Apto = Apto;
+        lista[qtd].Andar = Andar;
         m[Andar-1][Apto-1] = 'O'; // Passa de Reservado para Ocupado
         printf("Check-in de reserva realizado com sucesso!\n");
         return qtd + 1; // Incrementa e retorna a nova quantidade
         
     } else {
         lista[qtd] = Cadastro(lista[qtd]); 
+        lista[qtd].Apto = Apto;
+        lista[qtd].Andar = Andar;
         m[Andar-1][Apto-1] = 'O'; // Passa de Livre para Ocupado
         printf("Check-in realizado com sucesso!\n");
         return qtd + 1; // Incrementa e retorna a nova quantidade
@@ -118,7 +130,8 @@ int MenuHotel(){
     printf("[5]. Mapa de ocuopação do hotel\n"); //Função Verhotel
     printf("[6]. Informações do hospede\n"); //Função Cadastro
     printf("[7]. Taxa de ocupação e reservas do hotel\n"); //Função porcentagem
-    printf("[8]. Sair\n"); 
+    printf("[8]. Visualizar um apartamento específico\n"); //Função visualizarApartamento 
+    printf("[9]. Sair\n"); 
     printf("==========================\n");
     printf("Escolha um número para acessar a opção : \n");
     scanf(" %d", &escolha);
@@ -248,6 +261,31 @@ struct hospede Cadastro(struct hospede h){
     scanf("%s", h.telefone);
 
     return h;
+}
+
+void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
+    int apto, Andar;
+    printf("Digite o apartamento e o andar para visualizar as informações: \n");
+    scanf("%d %d", &apto, &Andar);
+    if (Andar < 1 || Andar > LINHA || apto < 1 || apto > COLUNA){
+        printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
+        return;
+    }
+    if (m[Andar-1][apto-1] == 'O' || m[Andar-1][apto-1] == 'R'){
+        for (int i = 0; i < qtd; i++){
+            if (lista[i].Andar == Andar && lista[i].Apto == apto){
+                printf("=== Informações do Hóspede ===\n");
+                printf("Nome: %s", lista[i].nome);
+                printf("CPF: %s\n", lista[i].cpf);
+                printf("Telefone: %s\n", lista[i].telefone);
+                printf("Andar: %d\n", lista[i].Andar);
+                printf("Apartamento: %d\n", lista[i].Apto);
+                return;
+            }
+        }
+
+    }
+
 }
 
 //Essa função é utilizada para limpar o buffer do teclado, ela pode ser reutilizada quantas vezes forem necessárias no código.
