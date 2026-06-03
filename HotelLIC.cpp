@@ -11,6 +11,8 @@ struct hospede{
     char nome[50];
     char cpf[15];
     char telefone[20];
+    char email[50];
+    char endereco[100];
     int Apto;
     int Andar;
 };
@@ -21,7 +23,7 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 void fazerCheckout(char m[LINHA][COLUNA]);
 void gerarhotel(char m[LINHA][COLUNA]);
 void verhotel(char m[LINHA][COLUNA]);
-void ReservarApto(char m[LINHA][COLUNA]);
+int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 void porcentagem(char m[LINHA][COLUNA]);
 struct hospede Cadastro(struct hospede h);
 void limparBuffer();
@@ -47,7 +49,7 @@ int main(){
             fazerCheckout(hotel);
             break;
         case 3:
-            ReservarApto(hotel);
+            quantidadeHospedes = ReservarApto(hotel, lista, quantidadeHospedes); // Passa a lista de hóspedes e a quantidade atual para a função de reserva
             break;
         case 4:
             cancelarReserva(hotel);
@@ -62,6 +64,8 @@ int main(){
                 } else {
                     for (int i = 0; i < quantidadeHospedes; i++) {
                         printf("%d. %s - CPF: %s - Telefone: %s\n", i + 1, lista[i].nome, lista[i].cpf, lista[i].telefone);
+                        printf("   Email: %s", lista[i].email);
+                        printf("   Endereço: %s", lista[i].endereco);
                         printf("   Andar: %d, Apartamento: %d\n", lista[i].Andar, lista[i].Apto);
                         printf("\n");
                     }
@@ -75,7 +79,7 @@ int main(){
             visualizarApartamento(hotel, lista, quantidadeHospedes);
             break;
         case 9:
-            printf("Saindo do programa...\n");
+            printf("\nSaindo do programa...\n");
             break;
         default:
             printf("Opção inválida! Por favor, escolha uma opção válida.\n");
@@ -170,7 +174,7 @@ void verhotel(char m[LINHA][COLUNA]){
     printf("\n");
 }
 
-void ReservarApto(char m[LINHA][COLUNA]){
+int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
     int Apto, Andar;
     printf("==== Reservar apartamento ====\n");
     printf("Escolha o apartamento e o andar para reservar: \n");
@@ -181,6 +185,9 @@ void ReservarApto(char m[LINHA][COLUNA]){
     } else if (m[Andar-1][Apto-1] == 'O') { // Verifica se o apartamento já está ocupado, se estiver com O é porque está ocupado
         printf("Erro! Apartamento já ocupado!\n");
     } else {
+        lista[qtd] = Cadastro(lista[qtd]);
+        lista[qtd].Apto = Apto;
+        lista[qtd].Andar = Andar;
         printf("Apartamento reservado com sucesso!\n");
         m[Andar-1][Apto-1] = 'R'; // 'R' para Reservado
     }
@@ -259,10 +266,16 @@ struct hospede Cadastro(struct hospede h){
     scanf("%s", h.cpf);
     printf("Digite o telefone do hóspede: ");
     scanf("%s", h.telefone);
+    printf("Digite o email do hóspede: ");
+    scanf("%s", h.email);
+    printf("Digite o endereço do hóspede: ");
+    limparBuffer(); //Limpa o buffer do teclado
+    fgets(h.endereco, sizeof(h.endereco), stdin); //Lê o endereço do hóspede com espaços 
 
     return h;
 }
 
+//REQ09 - Visualizar um apartamento específico
 void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
     int apto, Andar;
     printf("Digite o apartamento e o andar para visualizar as informações: \n");
@@ -278,6 +291,8 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
                 printf("Nome: %s", lista[i].nome);
                 printf("CPF: %s\n", lista[i].cpf);
                 printf("Telefone: %s\n", lista[i].telefone);
+                printf("Email: %s\n", lista[i].email);
+                printf("Endereço: %s\n", lista[i].endereco);
                 printf("Andar: %d\n", lista[i].Andar);
                 printf("Apartamento: %d\n", lista[i].Apto);
                 return;
