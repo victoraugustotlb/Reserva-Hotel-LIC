@@ -6,22 +6,11 @@
 #define COLUNA 14
 #define MAX_HOSPEDES 280 //20 andares x 14 apartamentos por andar
 
-<<<<<<< HEAD
-//Aqui é armazenado o cadastro de cada hóspede do hotel.
-=======
 //Aqui é armazenado o cadastro de cada hóspede do hotel
->>>>>>> features/r
 struct hospede{
     char nome[50];
     char cpf[15];
     char telefone[20];
-<<<<<<< HEAD
-};
-
-//Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código.
-int MenuHotel();
-void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd);
-=======
     char email[50];
     char endereco[100];
     int Apto;
@@ -43,7 +32,6 @@ void fazerCheckout(char m[LINHA][COLUNA]);
 
 //Função que gera o mapa do hotel, preenchendo a matriz com '.' para indicar que os apartamentos estão livres
 //char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
->>>>>>> features/r
 void gerarhotel(char m[LINHA][COLUNA]);
 
 //Função que exibe o mapa do hotel
@@ -53,9 +41,6 @@ void ReservarApto(char m[LINHA][COLUNA]);
 struct hospede Cadastro(struct hospede h);
 void limparBuffer();
 
-<<<<<<< HEAD
-struct hospede lista[MAX_HOSPEDES];
-=======
 //Função que reserva um apartamento
 //char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 //struct hospede lista[] é a lista de hóspedes cadastrados e 
@@ -83,16 +68,11 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
 //-------------------------------------------------------------------------------------------------------------------
 
 struct hospede lista[MAX_HOSPEDES]; // Lista de hóspedes cadastrados no hotel
->>>>>>> features/r
 int quantidadeHospedes = 0; // Variável para controlar o número de hóspedes cadastrados
 
 //Aqui se encontra a função principal do programa.
 int main(){
-<<<<<<< HEAD
-    char hotel[LINHA][COLUNA];
-=======
     char hotel[LINHA][COLUNA]; // Matriz que representa o mapa do hotel
->>>>>>> features/r
     int opcao;
 
     gerarhotel(hotel);
@@ -101,21 +81,13 @@ int main(){
     
     switch (opcao) {
         case 1:
-<<<<<<< HEAD
-            RealizarCheckIN(hotel, lista, &quantidadeHospedes);
-=======
             quantidadeHospedes = RealizarCheckIN(hotel, lista, quantidadeHospedes); // Atualiza a quantidade de hóspedes após o check-in
->>>>>>> features/r
             break;
         case 2:
             fazerCheckout(hotel);
             break;
         case 3:
-<<<<<<< HEAD
-            ReservarApto(hotel);
-=======
             quantidadeHospedes = ReservarApto(hotel, lista, quantidadeHospedes); // Passa a lista de hóspedes e a quantidade atual para a função de reserva
->>>>>>> features/r
             break;
         case 4:
             cancelarReserva(hotel);
@@ -124,23 +96,16 @@ int main(){
             verhotel(hotel);
             break;
         case 6:
-<<<<<<< HEAD
-            printf("\n=== HÓSPEDES NO HOTEL ===\n");
-=======
             printf("\n=== HÓSPEDES NO HOTEL ===\n"); //REQ12 - Extra
->>>>>>> features/r
                 if (quantidadeHospedes == 0) {
                     printf("Nenhum hóspede cadastrado no momento.\n");
                 } else {
                     for (int i = 0; i < quantidadeHospedes; i++) {
                         printf("%d. %s - CPF: %s - Telefone: %s\n", i + 1, lista[i].nome, lista[i].cpf, lista[i].telefone);
-<<<<<<< HEAD
-=======
                         printf("   Email: %s", lista[i].email);
                         printf("   Endereço: %s", lista[i].endereco);
                         printf("   Andar: %d, Apartamento: %d\n", lista[i].Andar, lista[i].Apto);
                         printf("\n");
->>>>>>> features/r
                     }
                 }
                 break;
@@ -157,37 +122,11 @@ int main(){
         default:
             printf("Opção inválida! Por favor, escolha uma opção válida.\n");
     }
-<<<<<<< HEAD
-}while(opcao != 8);
-=======
 }while(opcao != 9);
->>>>>>> features/r
 
     return 0;
 }
 
-<<<<<<< HEAD
-//REQ03
-void RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int *qtd){
-    int Apto, Andar;
-    printf("Digite o apartamento e o andar da reserva para realizar o check-in: \n");
-    scanf("%d %d", &Apto, &Andar);
-    if (Andar < 1 || Andar > LINHA || Apto < 1 || Apto > COLUNA) {
-        printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
-        return; // Sai da função imediatamente, voltando para o menu
-    }
-    if (m[Andar-1][Apto-1] == 'O'){ //Aqui verifica se o apartamento já está ocupado!
-        printf("Erro! Apartamento Ocupado!\n");
-
-    }else if(m[Andar-1][Apto-1] == 'R'){
-        lista[*qtd] = Cadastro(lista[*qtd]); //Aqui o cadastro do hospede é feito quando o apartamento está reservado.
-        (*qtd)++; 
-    }else{
-        lista[*qtd] = Cadastro(lista[*qtd]); //Aqui o cadastro do hospede é feito quando o apartamento está disponível.
-        (*qtd)++; 
-        printf("Check-in realizado com sucesso!\n");
-        m[Andar-1][Apto-1] = 'O'; // 'O' para Ocupado
-=======
 //REQ03 - REQ11 
 int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
     int Apto, Andar;
@@ -197,7 +136,6 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
     if (Andar < 1 || Andar > LINHA || Apto < 1 || Apto > COLUNA) {
         printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
         return qtd; //retorna a mesma quantidade
->>>>>>> features/r
     }
     
     if (m[Andar-1][Apto-1] == 'O') { 
@@ -247,11 +185,7 @@ int MenuHotel(){
 
 
 //REQ01 - Gera o mapa do hotel
-<<<<<<< HEAD
-void gerarhotel(char m[LINHA][COLUNA]){
-=======
 void gerarhotel(char m[LINHA][COLUNA]){ //looping para preencher a matriz do hotel com '.'
->>>>>>> features/r
     for(int i = 0;i < LINHA;i++){
         for(int j =0 ;j < COLUNA;j++){
             m[i][j]='.';
@@ -281,23 +215,12 @@ void verhotel(char m[LINHA][COLUNA]){
     printf("\n");
 }
 
-<<<<<<< HEAD
-void ReservarApto(char m[LINHA][COLUNA]){
-=======
 int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
->>>>>>> features/r
     int Apto, Andar;
     printf("==== Reservar apartamento ====\n");
     printf("Escolha o apartamento e o andar para reservar: \n");
     scanf("%d %d", &Apto, &Andar);
 
-<<<<<<< HEAD
-    if (m[Andar-1][Apto-1] == 'R'){
-        printf("Erro! Apartamento já reservado!\n");
-    } else if (m[Andar-1][Apto-1] == 'O') {
-        printf("Erro! Apartamento já ocupado!\n");
-    } else {
-=======
     if (m[Andar-1][Apto-1] == 'R'){ // Verifica se o apartamento já está reservado, se estiver com R é porque está reservado
         printf("Erro! Apartamento já reservado!\n");
     } else if (m[Andar-1][Apto-1] == 'O') { // Verifica se o apartamento já está ocupado, se estiver com O é porque está ocupado
@@ -306,14 +229,10 @@ int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
         lista[qtd] = Cadastro(lista[qtd]);
         lista[qtd].Apto = Apto;
         lista[qtd].Andar = Andar;
->>>>>>> features/r
         printf("Apartamento reservado com sucesso!\n");
         m[Andar-1][Apto-1] = 'R'; // 'R' para Reservado
     }
 }
-<<<<<<< HEAD
-
-=======
 //REQ06 - Cancelar reserva
 void cancelarReserva(char m[LINHA][COLUNA]){
 	int andar, apt;
@@ -378,36 +297,25 @@ void porcentagem(char m[LINHA][COLUNA]){
 	return;
 }
 //REQ08 - Cadastrar informações do hóspede
->>>>>>> features/r
 struct hospede Cadastro(struct hospede h){
 
     printf("=== Cadastro do Hóspede ===\n");
     printf("Digite o nome do hóspede: ");
-<<<<<<< HEAD
-    limparBuffer();
-    fgets(h.nome, sizeof(h.nome), stdin);
-=======
     limparBuffer(); //Limpa o buffer do teclado  
     fgets(h.nome, sizeof(h.nome), stdin); //Lê o nome do hóspede, incluindo espaços, por isso o fgets
->>>>>>> features/r
     printf("Digite o CPF do hóspede: ");
     scanf("%s", h.cpf);
     printf("Digite o telefone do hóspede: ");
     scanf("%s", h.telefone);
-<<<<<<< HEAD
-=======
     printf("Digite o email do hóspede: ");
     scanf("%s", h.email);
     printf("Digite o endereço do hóspede: ");
     limparBuffer(); //Limpa o buffer do teclado
     fgets(h.endereco, sizeof(h.endereco), stdin); //Lê o endereço do hóspede com espaços 
->>>>>>> features/r
 
     return h;
 }
 
-<<<<<<< HEAD
-=======
 //REQ09 - Visualizar um apartamento específico
 void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
     int apto, Andar;
@@ -436,13 +344,8 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
 
 }
 
->>>>>>> features/r
 //Essa função é utilizada para limpar o buffer do teclado, ela pode ser reutilizada quantas vezes forem necessárias no código.
 void limparBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> features/r
