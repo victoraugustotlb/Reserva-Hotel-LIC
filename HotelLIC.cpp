@@ -16,20 +16,55 @@ struct hospede{
     int Apto;
     int Andar;
 };
-
+//-------------------------------------------------------------------------------------------------------------------
 //Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código
 int MenuHotel();
+
+//Funcão que realiza o check-in 
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel, 
+//struct hospede lista[] é a lista de hóspedes cadastrados e 
+//int qtd é a quantidade de hóspedes cadastrados
 int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
+
+//Função que realiza o check-out 
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void fazerCheckout(char m[LINHA][COLUNA]);
+
+//Função que gera o mapa do hotel, preenchendo a matriz com '.' para indicar que os apartamentos estão livres
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void gerarhotel(char m[LINHA][COLUNA]);
+
+//Função que exibe o mapa do hotel
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void verhotel(char m[LINHA][COLUNA]);
+
+//Função que reserva um apartamento
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
+//struct hospede lista[] é a lista de hóspedes cadastrados e 
+//int qtd é a quantidade de hóspedes cadastrados
 int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
+
+//Função que calcula a porcentagem de ocupação e reservas do hotel
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void porcentagem(char m[LINHA][COLUNA]);
+
+//Função que cadastra as informações do hóspede
+//struct hospede h é a estrutura que armazena as informações do hóspede
 struct hospede Cadastro(struct hospede h);
+
+//Função que limpa o buffer do teclado, para evitar problemas com a leitura de strings
 void limparBuffer();
 void cancelarReserva(char m[LINHA][COLUNA]);
-struct hospede lista[MAX_HOSPEDES];
+
+//Função que visualiza as informações de um apartamento específico, caso ele esteja ocupado ou reservado
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel, 
+//struct hospede lista[] é a lista de hóspedes cadastrados e 
+//int qtd é a quantidade de hóspedes cadastrados
 void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
+
+//-------------------------------------------------------------------------------------------------------------------
+
+struct hospede lista[MAX_HOSPEDES]; // Lista de hóspedes cadastrados no hotel
 int quantidadeHospedes = 0; // Variável para controlar o número de hóspedes cadastrados
 
 //Aqui se encontra a função principal do programa.
@@ -89,7 +124,7 @@ int main(){
     return 0;
 }
 
-//REQ03
+//REQ03 - REQ11 
 int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
     int Apto, Andar;
     printf("Digite o apartamento e o andar da reserva para realizar o check-in: \n");
@@ -105,9 +140,12 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
         return qtd; //retorna a mesma quantidade
         
     } else if (m[Andar-1][Apto-1] == 'R') {
-        lista[qtd] = Cadastro(lista[qtd]); 
-        lista[qtd].Apto = Apto;
-        lista[qtd].Andar = Andar;
+        printf("Digite o CPF do hóspede para confirmar a reserva: \n");
+        scanf("%s", lista[qtd].cpf);
+        if (strcmp(lista[qtd].cpf, lista[qtd-1].cpf) != 0) { // Verifica se o CPF digitado corresponde ao CPF da reserva
+            printf("Erro! CPF não corresponde à reserva!\n");
+            return qtd; //retorna a mesma quantidade
+        }
         m[Andar-1][Apto-1] = 'O'; // Passa de Reservado para Ocupado
         printf("Check-in de reserva realizado com sucesso!\n");
         return qtd + 1; // Incrementa e retorna a nova quantidade
