@@ -6,14 +6,14 @@
 #define COLUNA 14
 #define MAX_HOSPEDES 280 //20 andares x 14 apartamentos por andar
 
-//Aqui é armazenado o cadastro de cada hóspede do hotel.
+//Aqui é armazenado o cadastro de cada hóspede do hotel
 struct hospede{
     char nome[50];
     char cpf[15];
     char telefone[20];
 };
 
-//Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código.
+//Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código
 int MenuHotel();
 int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 void fazerCheckout(char m[LINHA][COLUNA]);
@@ -29,7 +29,7 @@ int quantidadeHospedes = 0; // Variável para controlar o número de hóspedes c
 
 //Aqui se encontra a função principal do programa.
 int main(){
-    char hotel[LINHA][COLUNA];
+    char hotel[LINHA][COLUNA]; // Matriz que representa o mapa do hotel
     int opcao;
 
     gerarhotel(hotel);
@@ -38,7 +38,7 @@ int main(){
     
     switch (opcao) {
         case 1:
-            quantidadeHospedes = RealizarCheckIN(hotel, lista, quantidadeHospedes);
+            quantidadeHospedes = RealizarCheckIN(hotel, lista, quantidadeHospedes); // Atualiza a quantidade de hóspedes após o check-in
             break;
         case 2:
             fazerCheckout(hotel);
@@ -85,12 +85,12 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
     
     if (Andar < 1 || Andar > LINHA || Apto < 1 || Apto > COLUNA) {
         printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
-        return qtd; // Não mudou nada, retorna a mesma quantidade
+        return qtd; //retorna a mesma quantidade
     }
     
     if (m[Andar-1][Apto-1] == 'O') { 
         printf("Erro! Apartamento Ocupado!\n");
-        return qtd; // Não mudou nada, retorna a mesma quantidade
+        return qtd; //retorna a mesma quantidade
         
     } else if (m[Andar-1][Apto-1] == 'R') {
         lista[qtd] = Cadastro(lista[qtd]); 
@@ -111,14 +111,14 @@ int MenuHotel(){
     printf("==========================\n");
     printf("  Bem-vindo ao Hotel LIC! \n");
     printf("==========================\n");
-    printf("[1]. Realizar Check-in\n");
-    printf("[2]. Realizar Check-out\n");
+    printf("[1]. Realizar Check-in\n"); //Função RealizarCheckIN
+    printf("[2]. Realizar Check-out\n"); //Função fazerCheckout
     printf("[3]. Reservar Apartamento\n"); //Função Reservarapto
-    printf("[4]. Cancelar Reserva\n");
+    printf("[4]. Cancelar Reserva\n"); //Função cancelarReserva
     printf("[5]. Mapa de ocuopação do hotel\n"); //Função Verhotel
-    printf("[6]. Informações do hospede\n");
-    printf("[7]. Taxa de ocupação e reservas do hotel\n");
-    printf("[8]. Sair\n");
+    printf("[6]. Informações do hospede\n"); //Função Cadastro
+    printf("[7]. Taxa de ocupação e reservas do hotel\n"); //Função porcentagem
+    printf("[8]. Sair\n"); 
     printf("==========================\n");
     printf("Escolha um número para acessar a opção : \n");
     scanf(" %d", &escolha);
@@ -127,7 +127,7 @@ int MenuHotel(){
 
 
 //REQ01 - Gera o mapa do hotel
-void gerarhotel(char m[LINHA][COLUNA]){
+void gerarhotel(char m[LINHA][COLUNA]){ //looping para preencher a matriz do hotel com '.'
     for(int i = 0;i < LINHA;i++){
         for(int j =0 ;j < COLUNA;j++){
             m[i][j]='.';
@@ -163,23 +163,23 @@ void ReservarApto(char m[LINHA][COLUNA]){
     printf("Escolha o apartamento e o andar para reservar: \n");
     scanf("%d %d", &Apto, &Andar);
 
-    if (m[Andar-1][Apto-1] == 'R'){
+    if (m[Andar-1][Apto-1] == 'R'){ // Verifica se o apartamento já está reservado, se estiver com R é porque está reservado
         printf("Erro! Apartamento já reservado!\n");
-    } else if (m[Andar-1][Apto-1] == 'O') {
+    } else if (m[Andar-1][Apto-1] == 'O') { // Verifica se o apartamento já está ocupado, se estiver com O é porque está ocupado
         printf("Erro! Apartamento já ocupado!\n");
     } else {
         printf("Apartamento reservado com sucesso!\n");
         m[Andar-1][Apto-1] = 'R'; // 'R' para Reservado
     }
 }
-
+//REQ06 - Cancelar reserva
 void cancelarReserva(char m[LINHA][COLUNA]){
 	int andar, apt;
 	printf("=== Cancelar Reserva ===\n");
 	printf("Insira respectivamente o andar e o apartamento(x y):\n");
 	scanf("%d %d", &apt, &andar);
 
-	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){
+	if((andar > LINHA || andar < 1) || (apt > COLUNA || apt < 1)){ //Verifica se o andar e o apartamento existem, se não existirem, exibe a mensagem de erro
 		printf("Erro: Apartamento/Andar inexistente\n");
 		return;
 	}
@@ -193,7 +193,7 @@ void cancelarReserva(char m[LINHA][COLUNA]){
 		return;
 	}
 }
-
+//REQ05 - Fazer checkout
 void fazerCheckout(char m[LINHA][COLUNA]){
 	int andar, apt;
 	printf("=== Fazer Checkout ===\n");
@@ -214,11 +214,11 @@ void fazerCheckout(char m[LINHA][COLUNA]){
 		return;
 	}
 }
-
+//REQ07 - Calcular a porcentagem de ocupação e reservas do hotel
 void porcentagem(char m[LINHA][COLUNA]){
 	float taxaO = 0;
 	float taxaR = 0;
-	for(int i = 0; i < LINHA; i++){
+	for(int i = 0; i < LINHA; i++){ //Looping para percorrer a matriz do hotel e contar quantos apartamentos estão ocupados e quantos estão reservados
 		for(int j = 0; j < COLUNA; j++){
 			if(m[i][j] == 'O'){
 				taxaO++;
@@ -228,20 +228,20 @@ void porcentagem(char m[LINHA][COLUNA]){
 			}
 		}
 	}
-	taxaO = (taxaO / 280) * 100;
-	taxaR = (taxaR / 280) * 100;
+	taxaO = (taxaO / 280) * 100; //Calcula a porcentagem de ocupação
+	taxaR = (taxaR / 280) * 100;//Calcula a porcentagem de reservas
 	printf("=== Taxas ===\n");
 	printf("Taxa de ocupacao: %.2f%%\n",taxaO);
 	printf("Taxa de reservas: %.2f%%\n",taxaR);
 	return;
 }
-
+//REQ08 - Cadastrar informações do hóspede
 struct hospede Cadastro(struct hospede h){
 
     printf("=== Cadastro do Hóspede ===\n");
     printf("Digite o nome do hóspede: ");
-    limparBuffer();
-    fgets(h.nome, sizeof(h.nome), stdin);
+    limparBuffer(); //Limpa o buffer do teclado  
+    fgets(h.nome, sizeof(h.nome), stdin); //Lê o nome do hóspede, incluindo espaços, por isso o fgets
     printf("Digite o CPF do hóspede: ");
     scanf("%s", h.cpf);
     printf("Digite o telefone do hóspede: ");
