@@ -322,8 +322,8 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
         printf("Erro! O andar deve ser de 1 a %d e o apartamento de 1 a %d.\n", LINHA, COLUNA);
         return;
     }
-    if (m[Andar-1][apto-1] == 'O' || m[Andar-1][apto-1] == 'R'){
-        for (int i = 0; i < qtd; i++){
+    if (m[Andar-1][apto-1] == 'O' || m[Andar-1][apto-1] == 'R'){ // Verifica se o apartamento está ocupado ou reservado, se estiver, exibe as informações do hóspede
+        for (int i = 0; i < qtd; i++){ // Looping para percorrer a lista de hóspedes cadastrados e encontrar o hóspede que está no apartamento e andar especificados
             if (lista[i].Andar == Andar && lista[i].Apto == apto){
                 printf("=== Informações do Hóspede ===\n");
                 printf("Nome: %s", lista[i].nome);
