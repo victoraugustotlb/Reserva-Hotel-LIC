@@ -68,6 +68,7 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
 
 void TiposQuartos(struct hospede lista[], int qtd);
 
+void mostrarTiposQuartos();
 //-------------------------------------------------------------------------------------------------------------------
 
 struct hospede lista[MAX_HOSPEDES]; // Lista de hóspedes cadastrados no hotel
@@ -120,7 +121,7 @@ int main(){
             visualizarApartamento(hotel, lista, quantidadeHospedes);
             break;
         case 9:
-            //REQ12 - Extra
+            mostrarTiposQuartos();
             break;
         case 10:
             printf("\nSaindo do programa...\n");
@@ -378,6 +379,14 @@ void TiposQuartos(struct hospede lista[], int qtd){
         default:
             printf("Opção inválida! Por favor, escolha um tipo de quarto válido.\n");
     }
+}
+
+void mostrarTiposQuartos(){
+	printf("=== Tipos de Quartos e Preços ===\n");
+	printf("Quarto Standard: R$ 200,00 por noite\n");
+	printf("Quarto Deluxe: R$ 350,00 por noite\n");
+	printf("Suíte: R$ 500,00 por noite\n");
+	printf("================================\n");	
 }
 
 //Essa função é utilizada para limpar o buffer do teclado, ela pode ser reutilizada quantas vezes forem necessárias no código.
