@@ -15,6 +15,7 @@ struct hospede{
     char endereco[100];
     int Apto;
     int Andar;
+    char tipo[20]; // 1 para Standard, 2 para Deluxe e 3 para Suíte
 };
 //-------------------------------------------------------------------------------------------------------------------
 //Aqui estão declaradas as funções do programa, elas estão em ordem de uso para facilitar a leitura do código
@@ -65,6 +66,8 @@ void cancelarReserva(char m[LINHA][COLUNA]);
 //int qtd é a quantidade de hóspedes cadastrados
 void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 
+void TiposQuartos(struct hospede lista[], int qtd);
+
 //-------------------------------------------------------------------------------------------------------------------
 
 struct hospede lista[MAX_HOSPEDES]; // Lista de hóspedes cadastrados no hotel
@@ -101,7 +104,7 @@ int main(){
                     printf("Nenhum hóspede cadastrado no momento.\n");
                 } else {
                     for (int i = 0; i < quantidadeHospedes; i++) {
-                        printf("%d. %s - CPF: %s - Telefone: %s\n", i + 1, lista[i].nome, lista[i].cpf, lista[i].telefone);
+                        printf("%d. %s - Tipo de Quarto: %s - CPF: %s - Telefone: %s\n", i + 1, lista[i].nome, lista[i].tipo, lista[i].cpf, lista[i].telefone);
                         printf("   Email: %s", lista[i].email);
                         printf("   Endereço: %s", lista[i].endereco);
                         printf("   Andar: %d, Apartamento: %d\n", lista[i].Andar, lista[i].Apto);
@@ -117,12 +120,15 @@ int main(){
             visualizarApartamento(hotel, lista, quantidadeHospedes);
             break;
         case 9:
+            //REQ12 - Extra
+            break;
+        case 10:
             printf("\nSaindo do programa...\n");
             break;
         default:
             printf("Opção inválida! Por favor, escolha uma opção válida.\n");
     }
-}while(opcao != 9);
+}while(opcao != 10);
 
     return 0;
 }
@@ -154,7 +160,8 @@ int RealizarCheckIN(char m[LINHA][COLUNA], struct hospede lista[], int qtd) {
         return qtd + 1; // Incrementa e retorna a nova quantidade
         
     } else {
-        lista[qtd] = Cadastro(lista[qtd]); 
+        lista[qtd] = Cadastro(lista[qtd]);
+        TiposQuartos(lista, qtd); 
         lista[qtd].Apto = Apto;
         lista[qtd].Andar = Andar;
         m[Andar-1][Apto-1] = 'O'; // Passa de Livre para Ocupado
@@ -176,7 +183,8 @@ int MenuHotel(){
     printf("[6]. Informações do hospede\n"); //Função Cadastro
     printf("[7]. Taxa de ocupação e reservas do hotel\n"); //Função porcentagem
     printf("[8]. Visualizar um apartamento específico\n"); //Função visualizarApartamento 
-    printf("[9]. Sair\n"); 
+    printf("[9]. Tipos de quartos e preços\n"); //REQ12 - Extra
+    printf("[10]. Sair\n"); 
     printf("==========================\n");
     printf("Escolha um número para acessar a opção : \n");
     scanf(" %d", &escolha);
@@ -216,21 +224,25 @@ void verhotel(char m[LINHA][COLUNA]){
 }
 
 int ReservarApto(char m[LINHA][COLUNA], struct hospede lista[], int qtd){
-    int Apto, Andar;
+    int Apto, Andar, tipo;
     printf("==== Reservar apartamento ====\n");
+    TiposQuartos(lista, qtd); // Exibe os tipos de quartos e preços para o hóspede escolher o tipo do quarto que deseja reservar
     printf("Escolha o apartamento e o andar para reservar: \n");
     scanf("%d %d", &Apto, &Andar);
 
     if (m[Andar-1][Apto-1] == 'R'){ // Verifica se o apartamento já está reservado, se estiver com R é porque está reservado
         printf("Erro! Apartamento já reservado!\n");
+        return qtd; //retorna a mesma quantidade
     } else if (m[Andar-1][Apto-1] == 'O') { // Verifica se o apartamento já está ocupado, se estiver com O é porque está ocupado
         printf("Erro! Apartamento já ocupado!\n");
+        return qtd; //retorna a mesma quantidade
     } else {
         lista[qtd] = Cadastro(lista[qtd]);
         lista[qtd].Apto = Apto;
         lista[qtd].Andar = Andar;
         printf("Apartamento reservado com sucesso!\n");
         m[Andar-1][Apto-1] = 'R'; // 'R' para Reservado
+        return qtd + 1; // Incrementa e retorna a nova quantidade de hóspedes cadastrados
     }
 }
 //REQ06 - Cancelar reserva
@@ -342,6 +354,30 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
 
     }
 
+}
+
+void TiposQuartos(struct hospede lista[], int qtd){
+    int tipo;
+    printf("=== Tipos de Quartos e Preços ===\n");
+    printf("1. Quarto Standard: R$ 200,00 por noite\n");
+    printf("2. Quarto Deluxe: R$ 350,00 por noite\n");
+    printf("3. Suíte: R$ 500,00 por noite\n");
+    printf("================================\n");
+    printf("Escolha o tipo de quarto: \n");
+    scanf("%d", &tipo);
+    switch (tipo) {
+        case 1:
+            strcpy(lista[qtd].tipo, "Standard");
+            break;
+        case 2:
+            strcpy(lista[qtd].tipo, "Deluxe");
+            break;
+        case 3:
+            strcpy(lista[qtd].tipo, "Suíte");
+            break;
+        default:
+            printf("Opção inválida! Por favor, escolha um tipo de quarto válido.\n");
+    }
 }
 
 //Essa função é utilizada para limpar o buffer do teclado, ela pode ser reutilizada quantas vezes forem necessárias no código.
