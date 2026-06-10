@@ -38,9 +38,6 @@ void gerarhotel(char m[LINHA][COLUNA]);
 //Função que exibe o mapa do hotel
 //char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void verhotel(char m[LINHA][COLUNA]);
-void ReservarApto(char m[LINHA][COLUNA]);
-struct hospede Cadastro(struct hospede h);
-void limparBuffer();
 
 //Função que reserva um apartamento
 //char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
@@ -58,6 +55,9 @@ struct hospede Cadastro(struct hospede h);
 
 //Função que limpa o buffer do teclado, para evitar problemas com a leitura de strings
 void limparBuffer();
+
+//Função que cancela uma reserva
+//char m[LINHA][COLUNA] é a matriz que representa o mapa do hotel
 void cancelarReserva(char m[LINHA][COLUNA]);
 
 //Função que visualiza as informações de um apartamento específico, caso ele esteja ocupado ou reservado
@@ -66,8 +66,12 @@ void cancelarReserva(char m[LINHA][COLUNA]);
 //int qtd é a quantidade de hóspedes cadastrados
 void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qtd);
 
+//Função que exibe os tipos de quartos e preços para o hóspede escolher o tipo do quarto que deseja reservar
+//struct hospede lista[] é a lista de hóspedes cadastrados e 
+//int qtd é a quantidade de hóspedes cadastrados
 void TiposQuartos(struct hospede lista[], int qtd);
 
+//Função que exibe os tipos de quartos e preços para o hóspede visualizar os preços e tipos de quartos disponíveis
 void mostrarTiposQuartos();
 //-------------------------------------------------------------------------------------------------------------------
 
@@ -257,12 +261,12 @@ void cancelarReserva(char m[LINHA][COLUNA]){
 		printf("Erro: Apartamento/Andar inexistente\n");
 		return;
 	}
-	else if(m[andar - 1][apt - 1] != 'R'){
+	else if(m[andar - 1][apt - 1] != 'R'){ //Verifica se o apartamento está reservado, se não estiver, exibe a mensagem de erro
 		printf("Erro: Apartamento nao reservado\n");
 		return;
 	}
 	else{
-		m[andar - 1][apt - 1] = '.';
+		m[andar - 1][apt - 1] = '.'; // Passa de Reservado para Livre
 		printf("Reserva cancelada com sucesso\n");
 		return;
 	}
@@ -354,9 +358,14 @@ void visualizarApartamento(char m[LINHA][COLUNA], struct hospede lista[], int qt
         }
 
     }
+    if (m[Andar-1][apto-1] == '.'){ // Verifica se o apartamento está livre, se estiver, exibe a mensagem de que o apartamento está livre
+        printf("Apartamento livre! Sem dados!\n");
+        return;
+    }
 
 }
 
+//REQ12
 void TiposQuartos(struct hospede lista[], int qtd){
     int tipo;
     printf("=== Tipos de Quartos e Preços ===\n");
@@ -381,6 +390,7 @@ void TiposQuartos(struct hospede lista[], int qtd){
     }
 }
 
+//REQ12
 void mostrarTiposQuartos(){
 	printf("=== Tipos de Quartos e Preços ===\n");
 	printf("Quarto Standard: R$ 200,00 por noite\n");
